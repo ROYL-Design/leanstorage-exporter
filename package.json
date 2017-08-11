@@ -1,0 +1,46 @@
+{
+  "private": true,
+  "name": "leanstorage-exporter",
+  "productName": "leanstorage-exporter",
+  "description": "Export LeanStorage data to spreadsheet formats",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "poi",
+    "build": "poi build",
+    "report": "poi build --bundle-report",
+    "serve": "serve dist --single"
+  },
+  "babel": {
+    "presets": [
+      [
+        "vue-app",
+        {
+          "useBuiltIns": true
+        }
+      ]
+    ]
+  },
+  "author": {
+    "name": "NemoAlex",
+    "email": "zhhjchina@gmail.com"
+  },
+  "dependencies": {
+    "axios": "^0.16.2",
+    "bulma": "^0.5.1",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "normalize.css": "^7.0.0",
+    "object-assign": "^4.1.1",
+    "promise-polyfill": "^6.0.2",
+    "pug": "^2.0.0-rc.3",
+    "vue-router": "^2.7.0"
+  },
+  "devDependencies": {
+    "node-sass": "^4.5.3",
+    "poi": "^9.0.0",
+    "poi-preset-bundle-report": "^2.0.0",
+    "sass-loader": "^6.0.6",
+    "serve": "^3.1.0"
+  }
+}
