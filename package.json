@@ -9,7 +9,8 @@
     "dev": "poi",
     "build": "poi build",
     "report": "poi build --bundle-report",
-    "serve": "serve dist --single"
+    "serve": "serve dist --single",
+    "deploy": "poi build && gh-pages -d dist"
   },
   "babel": {
     "presets": [
@@ -37,6 +38,7 @@
     "vue-router": "^2.7.0"
   },
   "devDependencies": {
+    "gh-pages": "^1.0.0",
     "node-sass": "^4.5.3",
     "poi": "^9.0.0",
     "poi-preset-bundle-report": "^2.0.0",

@@ -250,6 +250,12 @@ async-to-gen@1.3.2:
     babylon "^6.14.0"
     magic-string "^0.19.0"
 
+async@2.1.4:
+  version "2.1.4"
+  resolved "http://registry.npm.taobao.org/async/download/async-2.1.4.tgz#2d2160c7788032e4dd6cbe2502f1f9a2c8f6cde4"
+  dependencies:
+    lodash "^4.14.0"
+
 async@^1.4.0, async@^1.5.2:
   version "1.5.2"
   resolved "http://registry.npm.taobao.org/async/download/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
@@ -837,6 +843,10 @@ base64-js@^1.0.2:
   version "1.2.1"
   resolved "http://registry.npm.taobao.org/base64-js/download/base64-js-1.2.1.tgz#a91947da1f4a516ea38e5b4ec0ec3773675e0886"
 
+base64url@^2.0.0:
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/base64url/download/base64url-2.0.0.tgz#eac16e03ea1438eff9423d69baa36262ed1f70bb"
+
 basic-auth@1.1.0:
   version "1.1.0"
   resolved "http://registry.npm.taobao.org/basic-auth/download/basic-auth-1.1.0.tgz#45221ee429f7ee1e5035be3f51533f1cdfd29884"
@@ -1304,6 +1314,12 @@ commander@2.11.x, commander@^2.9.0, commander@~2.11.0:
 commander@2.8.x:
   version "2.8.1"
   resolved "http://registry.npm.taobao.org/commander/download/commander-2.8.1.tgz#06be367febfda0c330aa1e2a072d3dc9762425d4"
+  dependencies:
+    graceful-readlink ">= 1.0.0"
+
+commander@2.9.0:
+  version "2.9.0"
+  resolved "http://registry.npm.taobao.org/commander/download/commander-2.9.0.tgz#9c99094176e12240cb22d6c5146098400fe0f7d4"
   dependencies:
     graceful-readlink ">= 1.0.0"
 
@@ -2302,6 +2318,14 @@ fs-extra@^2.0.0:
     graceful-fs "^4.1.2"
     jsonfile "^2.1.0"
 
+fs-extra@^3.0.1:
+  version "3.0.1"
+  resolved "http://registry.npm.taobao.org/fs-extra/download/fs-extra-3.0.1.tgz#3794f378c58b342ea7dbbb23095109c4b3b62291"
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^3.0.0"
+    universalify "^0.1.0"
+
 fs-promise@2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/fs-promise/download/fs-promise-2.0.0.tgz#d1c8bae6ab2bc2ea0cfad643d5fb1c07814d22b3"
@@ -2381,6 +2405,18 @@ getpass@^0.1.1:
   resolved "http://registry.npm.taobao.org/getpass/download/getpass-0.1.7.tgz#5eff8e3e684d569ae4cb2b1282604e8ba62149fa"
   dependencies:
     assert-plus "^1.0.0"
+
+gh-pages@^1.0.0:
+  version "1.0.0"
+  resolved "http://registry.npm.taobao.org/gh-pages/download/gh-pages-1.0.0.tgz#4a46f4c25439f7a2b7e6835504d4a49e949f04ca"
+  dependencies:
+    async "2.1.4"
+    base64url "^2.0.0"
+    commander "2.9.0"
+    fs-extra "^3.0.1"
+    globby "^6.1.0"
+    graceful-fs "4.1.11"
+    rimraf "^2.5.4"
 
 glob-base@^0.3.0:
   version "0.3.0"
@@ -2481,7 +2517,7 @@ got@^6.7.1:
     unzip-response "^2.0.1"
     url-parse-lax "^1.0.0"
 
-graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.1.9:
+graceful-fs@4.1.11, graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.1.9:
   version "4.1.11"
   resolved "http://registry.npm.taobao.org/graceful-fs/download/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
@@ -3114,6 +3150,12 @@ json5@^0.5.0, json5@^0.5.1:
 jsonfile@^2.1.0:
   version "2.4.0"
   resolved "http://registry.npm.taobao.org/jsonfile/download/jsonfile-2.4.0.tgz#3736a2b428b87bbda0cc83b53fa3d633a35c2ae8"
+  optionalDependencies:
+    graceful-fs "^4.1.6"
+
+jsonfile@^3.0.0:
+  version "3.0.1"
+  resolved "http://registry.npm.taobao.org/jsonfile/download/jsonfile-3.0.1.tgz#a5ecc6f65f53f662c4415c7675a0331d0992ec66"
   optionalDependencies:
     graceful-fs "^4.1.6"
 
@@ -4897,7 +4939,7 @@ right-align@^0.1.1:
   dependencies:
     align-text "^0.1.1"
 
-rimraf@2, rimraf@^2.2.8, rimraf@^2.5.1, rimraf@^2.6.1:
+rimraf@2, rimraf@^2.2.8, rimraf@^2.5.1, rimraf@^2.5.4, rimraf@^2.6.1:
   version "2.6.1"
   resolved "http://registry.npm.taobao.org/rimraf/download/rimraf-2.6.1.tgz#c2338ec643df7a1b7fe5c54fa86f57428a55f33d"
   dependencies:
@@ -5547,6 +5589,10 @@ unique-string@^1.0.0:
   resolved "http://registry.npm.taobao.org/unique-string/download/unique-string-1.0.0.tgz#9e1057cca851abb93398f8b33ae187b99caec11a"
   dependencies:
     crypto-random-string "^1.0.0"
+
+universalify@^0.1.0:
+  version "0.1.1"
+  resolved "http://registry.npm.taobao.org/universalify/download/universalify-0.1.1.tgz#fa71badd4437af4c148841e3b3b165f9e9e590b7"
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
