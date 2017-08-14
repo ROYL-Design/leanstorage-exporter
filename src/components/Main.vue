@@ -59,7 +59,7 @@
 <script>
 import axios from 'axios'
 import _ from 'lodash'
-import moment from 'moment'
+import format from '../lib/format'
 
 const operations = [
   { name: 'equals', operator: '=' },
@@ -136,11 +136,7 @@ export default {
         this.loading = false
       })
     },
-    display (content, format) {
-      if (format === 'Date') return moment(content).format('YYYY-MM-DD HH:mm:ss')
-      else if (format === 'GeoPoint') return `${content.longitude},${content.latitude}`
-      return content
-    },
+    display: format,
     disconnect () {
       this.$router.push('/login')
     }
