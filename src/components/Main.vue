@@ -138,7 +138,7 @@ export default {
     },
     display: format,
     disconnect () {
-      this.$router.push('/login')
+      this.$router.push('/connect')
     }
   },
   mounted () {
@@ -147,7 +147,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     var appId = window.localStorage.getItem('lse_app_id')
     var appKey = window.localStorage.getItem('lse_app_key')
-    if (!appId || !appKey) return next('/login')
+    if (!appId || !appKey) return next('/connect')
     api = axios.create({
       baseURL: 'https://api.leancloud.cn/1.1',
       headers: {

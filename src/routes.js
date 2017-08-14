@@ -1,9 +1,9 @@
-import Login from './components/Login'
+import Connect from './components/Connect'
 import Main from './components/Main'
 
 const routes = [
   { path: '/', component: Main },
-  { path: '/login', component: Login }
+  { path: '/connect', component: Connect }
 ]
 
 export default routes
