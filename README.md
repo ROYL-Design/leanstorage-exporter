@@ -1,6 +1,8 @@
 # leanstorage-exporter
 
 > Export LeanStorage data to spreadsheet formats
+> 
+> [Demo](https://royl-design.github.io/leanstorage-exporter/)
 
 ## Commands
 
