@@ -11,6 +11,7 @@ module.exports = {
     description: pkg.description,
     template: path.join(__dirname, 'index.ejs')
   },
+  homepage: './',
   postcss: {
     plugins: [
       // Your postcss plugins

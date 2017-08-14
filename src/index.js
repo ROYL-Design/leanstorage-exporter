@@ -12,7 +12,6 @@ new Vue({
   render: h => h('router-view'),
   router: new VueRouter({
     routes,
-    mode: 'history',
     scrollBehavior () {
       return { x: 0, y: 0 }
     }
