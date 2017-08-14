@@ -31,7 +31,6 @@
     "bulma": "^0.5.1",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
-    "normalize.css": "^7.0.0",
     "object-assign": "^4.1.1",
     "promise-polyfill": "^6.0.2",
     "pug": "^2.0.0-rc.3",

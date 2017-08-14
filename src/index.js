@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import 'normalize.css'
 import 'bulma'
 import './assets/global.sass'
 import VueRouter from 'vue-router'
