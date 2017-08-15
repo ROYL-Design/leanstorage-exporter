@@ -29,10 +29,10 @@
         .select
           select(v-model="condition.col")
             option(value="") Select a Column
-            option(v-for="column in columns") {{column}}
-        .select
-          select(v-model="condition.operator")
-            option(v-for="operation in operations", :value="operation.operator") {{ operation.name }}
+            option(v-for="column in queryColumns") {{column}}
+        .select(v-if="selectedClass && condition.col")
+          select(v-model="condition.id")
+            option(v-for="operator in operators.types[classes[selectedClass][condition.col].type]", :value="operator.id") {{ operator.name }}
         input.input(placeholder="Value", v-model="condition.value")
         .delete.is-medium(@click="conditions.splice(i, 1)")
     .field
@@ -60,11 +60,8 @@
 import axios from 'axios'
 import _ from 'lodash'
 import format from '../lib/format'
-
-const operations = [
-  { name: 'equals', operator: '=' },
-  { name: 'does not equal', operator: '!=' }
-]
+import CQL from '../lib/cql'
+import operators from '../lib/operators'
 
 var api = {}
 
@@ -74,9 +71,9 @@ export default {
       classes: {},
       selectedClass: '',
       conditions: [
-        { col: '', operator: '=', value: '' }
+        { col: '', id: 'equal', value: '' }
       ],
-      operations,
+      operators,
       loading: false,
       results: [],
       options: {
@@ -97,11 +94,16 @@ export default {
         else return 0
       })
       return keys
+    },
+    queryColumns () {
+      if (!this.selectedClass) return []
+      const allowedTypes = Object.keys(operators.types)
+      return this.columns.filter(col => allowedTypes.includes(this.classes[this.selectedClass][col].type))
     }
   },
   watch: {
     selectedClass (val) {
-      this.conditions = [{ col: '', operator: '=', value: '' }]
+      this.conditions = [{ col: '', id: 'equal', value: '' }]
       if (val) this.search()
     }
   },
@@ -112,19 +114,12 @@ export default {
       })
     },
     addCondition () {
-      this.conditions.push({ col: '', operator: '=', value: '' })
+      this.conditions.push({ col: '', id: 'equal', value: '' })
     },
     search () {
       if (this.loading) return
       if (!this.selectedClass) return window.alert('Please select a LeanStorage Class')
-      var cql = `select * from ${this.selectedClass}`
-      var conditions = this.conditions.filter(c => c.col)
-      if (conditions.length) {
-        conditions = conditions.map(condition => {
-          return `${condition.col} ${condition.operator} '${condition.value}'`
-        })
-        cql += ` where ${conditions.join(' and ')}`
-      }
+      var cql = CQL.generate(this.selectedClass, this.conditions)
       this.loading = true
       api.get('/cloudQuery', {
         params: { cql }
