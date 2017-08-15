@@ -1,14 +1,6 @@
 <style lang="sass" scoped>
 .container
   padding: 20px 0
-.query
-  .condition
-    margin-bottom: 10px
-    &>*
-      display: inline-block
-      margin-right: 10px
-      width: auto
-      vertical-align: middle
 .results
   table
     width: 100%
@@ -25,16 +17,7 @@
           option(v-for="(c, key) in classes") {{ key }}
     .field(v-if="conditions.length")
       .label Conditions
-      .condition(v-for="(condition, i) in conditions")
-        .select
-          select(v-model="condition.col")
-            option(value="") Select a Column
-            option(v-for="column in queryColumns") {{column}}
-        .select(v-if="selectedClass && condition.col")
-          select(v-model="condition.id")
-            option(v-for="operator in operators.types[classes[selectedClass][condition.col].type]", :value="operator.id") {{ operator.name }}
-        input.input(placeholder="Value", v-model="condition.value")
-        .delete.is-medium(@click="conditions.splice(i, 1)")
+      Condition(v-for="(condition, i) in conditions", :index="i", :key="i")
     .field
       .label Options
       label.checkbox
@@ -57,78 +40,49 @@
 </template>
 
 <script>
-import axios from 'axios'
 import _ from 'lodash'
 import format from '../lib/format'
-import CQL from '../lib/cql'
 import operators from '../lib/operators'
-
-var api = {}
+import Condition from './Condition'
+import store from '../store'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   data () {
     return {
-      classes: {},
-      selectedClass: '',
-      conditions: [
-        { col: '', id: 'equal', value: '' }
-      ],
       operators,
-      loading: false,
-      results: [],
       options: {
         showObjectId: false
       }
     }
   },
   computed: {
-    columns () {
-      if (!this.selectedClass) return []
-      var keys = Object.keys(this.classes[this.selectedClass])
-      if (!this.options.showObjectId) keys = keys.filter(key => key !== 'objectId')
-      keys.sort((a, b) => {
-        if (a === 'objectId') return -1
-        else if (b === 'objectId') return 1
-        else if (a === 'createdAt' || a === 'updatedAt') return 1
-        else if (b === 'createdAt' || b === 'updatedAt') return -1
-        else return 0
-      })
-      return keys
-    },
-    queryColumns () {
-      if (!this.selectedClass) return []
-      const allowedTypes = Object.keys(operators.types)
-      return this.columns.filter(col => allowedTypes.includes(this.classes[this.selectedClass][col].type))
+    ...mapState(['classes', 'conditions', 'loading', 'results']),
+    ...mapGetters(['columns', 'queryColumns']),
+    selectedClass: {
+      get () {
+        return this.$store.state.selectedClass
+      },
+      set (value) {
+        this.$store.commit('selectClass', value)
+      }
     }
   },
   watch: {
     selectedClass (val) {
-      this.conditions = [{ col: '', id: 'equal', value: '' }]
+      this.$store.commit('resetCondition')
       if (val) this.search()
     }
   },
   methods: {
-    getSchema () {
-      return api.get('/schemas').then(result => {
-        this.classes = _.pickBy(result.data, (val, key) => key.indexOf('_'))
-      })
-    },
     addCondition () {
-      this.conditions.push({ col: '', id: 'equal', value: '' })
+      this.$store.commit('addNewCondition')
     },
     search () {
       if (this.loading) return
       if (!this.selectedClass) return window.alert('Please select a LeanStorage Class')
-      var cql = CQL.generate(this.selectedClass, this.conditions)
-      this.loading = true
-      api.get('/cloudQuery', {
-        params: { cql }
-      }).then(result => {
-        this.results = result.data.results
-      }).catch(err => {
+      this.$store.dispatch('search').catch(err => {
         window.alert(err)
-      }).then(() => {
-        this.loading = false
       })
     },
     display: format,
@@ -137,20 +91,15 @@ export default {
     }
   },
   mounted () {
-    this.getSchema()
+    this.$store.dispatch('getClasses')
   },
   beforeRouteEnter (to, from, next) {
     var appId = window.localStorage.getItem('lse_app_id')
     var appKey = window.localStorage.getItem('lse_app_key')
     if (!appId || !appKey) return next('/connect')
-    api = axios.create({
-      baseURL: 'https://api.leancloud.cn/1.1',
-      headers: {
-        'X-LC-Id': appId,
-        'X-LC-Key': appKey + ',master'
-      }
-    })
+    store.commit('initKeys', { appId, appKey })
     next()
-  }
+  },
+  components: { Condition }
 }
 </script>
