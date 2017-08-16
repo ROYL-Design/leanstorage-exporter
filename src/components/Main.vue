@@ -58,7 +58,12 @@ export default {
   },
   computed: {
     ...mapState(['classes', 'conditions', 'loading', 'results']),
-    ...mapGetters(['columns', 'queryColumns']),
+    ...mapGetters(['queryColumns']),
+    columns () {
+      var columns = this.$store.getters.columns
+      if (!this.options.showObjectId) columns = columns.filter(col => col !== 'objectId')
+      return columns
+    },
     selectedClass: {
       get () {
         return this.$store.state.selectedClass
