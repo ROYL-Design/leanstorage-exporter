@@ -28,6 +28,7 @@
       .button.is-info(@click="addCondition") Add a condition
       .button.is-warning.is-pulled-right(@click="disconnect") Disconnect
   .results.box
+    .title.is-6(v-if="results.length") Total: {{ count }}{{ count > 100 ? ' (showing top 100)' : '' }}
     table.table(v-if="results.length")
       thead
         tr
@@ -55,7 +56,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['classes', 'conditions', 'loading', 'results']),
+    ...mapState(['classes', 'conditions', 'loading', 'results', 'count']),
     ...mapGetters(['queryColumns']),
     columns () {
       var columns = this.$store.getters.columns

@@ -10,7 +10,6 @@ var api = {}
 function getColumns (state) {
   if (!state.selectedClass) return []
   var keys = Object.keys(state.classes[state.selectedClass])
-  // if (!state.options.showObjectId) keys = keys.filter(key => key !== 'objectId')
   keys.sort((a, b) => {
     if (a === 'objectId') return -1
     else if (b === 'objectId') return 1
@@ -26,6 +25,7 @@ var store = new Vuex.Store({
     classes: {},
     selectedClass: '',
     loading: false,
+    count: 0,
     results: [],
     conditions: [
       { col: '', id: 'equal', value: '' }
@@ -76,10 +76,12 @@ var store = new Vuex.Store({
     search (context) {
       var cql = CQL.generate(context.state.selectedClass, context.state.conditions)
       context.state.loading = true
-      return api.get('/cloudQuery', {
-        params: { cql }
-      }).then(result => {
-        context.state.results = result.data.results
+      return Promise.all([
+        api.get('/cloudQuery', { params: { cql } }),
+        api.get('/cloudQuery', { params: { cql: cql.replace('select * from', 'select count(*) from') } })
+      ]).then(result => {
+        context.state.results = result[0].data.results
+        context.state.count = result[1].data.count
         context.state.loading = false
       }).catch(err => {
         context.state.loading = false
