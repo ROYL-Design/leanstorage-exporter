@@ -42,7 +42,6 @@
 <script>
 import _ from 'lodash'
 import format from '../lib/format'
-import operators from '../lib/operators'
 import Condition from './Condition'
 import store from '../store'
 import { mapGetters, mapState } from 'vuex'
@@ -50,7 +49,6 @@ import { mapGetters, mapState } from 'vuex'
 export default {
   data () {
     return {
-      operators,
       options: {
         showObjectId: false
       }
