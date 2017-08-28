@@ -65,6 +65,9 @@ var store = new Vuex.Store({
           'X-LC-Key': appKey + ',master'
         }
       })
+    },
+    clearResults (state) {
+      state.results = []
     }
   },
   actions: {

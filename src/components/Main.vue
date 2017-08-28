@@ -68,14 +68,11 @@ export default {
         return this.$store.state.selectedClass
       },
       set (value) {
+        this.$store.commit('clearResults')
+        this.$store.commit('resetCondition')
         this.$store.commit('selectClass', value)
+        if (value) this.search()
       }
-    }
-  },
-  watch: {
-    selectedClass (val) {
-      this.$store.commit('resetCondition')
-      if (val) this.search()
     }
   },
   methods: {
