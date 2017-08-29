@@ -4,7 +4,7 @@
 > 
 > [Demo](https://royl-design.github.io/leanstorage-exporter/)
 
-## Commands
+## Development
 
 ```bash
 # build for production
