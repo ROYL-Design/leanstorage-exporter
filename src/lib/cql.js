@@ -1,7 +1,7 @@
 import operators from './operators'
 
-function generate (classname, conditions) {
-  var cql = `select * from ${classname}`
+function where (conditions) {
+  var cql = ''
   conditions = conditions.filter(c => c.col)
   if (conditions.length) {
     conditions = conditions.map(condition => {
@@ -12,4 +12,17 @@ function generate (classname, conditions) {
   return cql
 }
 
-export default { generate }
+function search (classname, conditions, limit=100, skip=0) {
+  var cql = `select * from ${classname}`
+  cql += where(conditions)
+  cql += ` limit ${skip},${limit}`
+  return cql
+}
+
+function count (classname, conditions) {
+  var cql = `select count(*) from ${classname}`
+  cql += where(conditions)
+  return cql
+}
+
+export default { search, count }

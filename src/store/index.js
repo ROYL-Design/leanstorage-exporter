@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import CQL from '../lib/cql'
 import operators from '../lib/operators'
+import xlsx from '../lib/xlsx'
+import format from '../lib/format'
 
 Vue.use(Vuex)
 var api = {}
@@ -77,14 +79,48 @@ var store = new Vuex.Store({
       })
     },
     search (context) {
-      var cql = CQL.generate(context.state.selectedClass, context.state.conditions)
       context.state.loading = true
       return Promise.all([
-        api.get('/cloudQuery', { params: { cql } }),
-        api.get('/cloudQuery', { params: { cql: cql.replace('select * from', 'select count(*) from') } })
+        api.get('/cloudQuery', { params: { cql: CQL.search(context.state.selectedClass, context.state.conditions) } }),
+        api.get('/cloudQuery', { params: { cql: CQL.count(context.state.selectedClass, context.state.conditions) } })
       ]).then(result => {
         context.state.results = result[0].data.results
         context.state.count = result[1].data.count
+        context.state.loading = false
+      }).catch(err => {
+        context.state.loading = false
+        throw err
+      })
+    },
+    exportToFile (context) {
+      context.state.loading = true
+      var results = []
+      api.get('/cloudQuery', { params: { cql: CQL.count(context.state.selectedClass, context.state.conditions) } })
+      .then(result => {
+        var count = result.data.count
+        var p = Promise.resolve()
+        const per = 1000
+        var times = Math.ceil(count / per)
+        for (let i = 0; i < times; i++) {
+          p = p.then(function () {
+            return api.get('/cloudQuery', {
+              params: {
+                cql: CQL.search(context.state.selectedClass, context.state.conditions, per, per * i)
+              }
+            }).then(result => {
+              results = results.concat(result.data.results)
+            })
+          })
+        }
+        return p
+      })
+      .then(() => {
+        results.forEach(line => {
+          for (var key in line) {
+            line[key] = format.asFile(line[key], context.state.classes[context.state.selectedClass][key].type)
+          }
+        })
+        xlsx.exportToFile(results, getColumns(context.state))
         context.state.loading = false
       }).catch(err => {
         context.state.loading = false

@@ -15,17 +15,18 @@
         select(v-model="selectedClass")
           option(value="") Select a Class
           option(v-for="(c, key) in classes") {{ key }}
-    .field(v-if="conditions.length")
+    .field
       .label Conditions
       Condition(v-for="(condition, i) in conditions", :index="i", :key="i")
+      .button.is-light.is-small(@click="addCondition") Add a condition
     .field
       .label Options
       label.checkbox
         input(type="checkbox", v-model="options.showObjectId")
         |  Show objectId
     .toolbar
-      .button.is-primary.mgr-10(@click="search", :disabled="!selectedClass", :class="{'is-loading': loading}") Search
-      .button.is-info(@click="addCondition") Add a condition
+      .button.is-info.mgr-10(@click="search", :disabled="!selectedClass", :class="{'is-loading': loading}") Search
+      .button.is-success(@click="exportToFile", :disabled="!selectedClass || loading") Export to XLSX file
       .button.is-warning.is-pulled-right(@click="disconnect") Disconnect
   .results.box
     .title.is-6(v-if="results.length") Total: {{ count }}{{ count > 100 ? ' (showing top 100)' : '' }}
@@ -86,7 +87,14 @@ export default {
         window.alert(err)
       })
     },
-    display: format,
+    exportToFile () {
+      if (this.loading) return
+      if (!this.selectedClass) return window.alert('Please select a LeanStorage Class')
+      this.$store.dispatch('exportToFile').catch(err => {
+        window.alert(err)
+      })
+    },
+    display: format.display,
     disconnect () {
       this.$router.push('/connect')
     }
