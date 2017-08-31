@@ -26,7 +26,10 @@
         |  Show objectId
     .toolbar
       .button.is-info.mgr-10(@click="search", :disabled="!selectedClass", :class="{'is-loading': loading}") Search
-      .button.is-success(@click="exportToFile", :disabled="!selectedClass || loading") Export to XLSX file
+      .select.mgr-10
+        select(v-model="options.exportFileType")
+          option(v-for="type in fileTypes", :value="type.name") {{ type.extension }} | {{ type.description }}
+      .button.is-success(@click="exportToFile", :disabled="!selectedClass || loading") Export
       .button.is-warning.is-pulled-right(@click="disconnect") Disconnect
   .results.box
     .title.is-6(v-if="results.length") Total: {{ count }}{{ count > 100 ? ' (showing top 100)' : '' }}
@@ -47,13 +50,16 @@ import format from '../lib/format'
 import Condition from './Condition'
 import store from '../store'
 import { mapGetters, mapState } from 'vuex'
+import fileTypes from '../lib/types'
 
 export default {
   data () {
     return {
       options: {
-        showObjectId: false
-      }
+        showObjectId: false,
+        exportFileType: 'xlsx'
+      },
+      fileTypes
     }
   },
   computed: {
@@ -90,7 +96,7 @@ export default {
     exportToFile () {
       if (this.loading) return
       if (!this.selectedClass) return window.alert('Please select a LeanStorage Class')
-      this.$store.dispatch('exportToFile').catch(err => {
+      this.$store.dispatch('exportToFile', this.options.exportFileType).catch(err => {
         window.alert(err)
       })
     },

@@ -1,19 +1,20 @@
 import XLSX from 'xlsx'
 import FileSaver from 'file-saver'
+import types from './types'
+import download from 'downloadjs'
 
-function s2ab (s) {
-  var buf = new ArrayBuffer(s.length)
-  var view = new Uint8Array(buf)
-  for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF
-  return buf
-}
-
-function exportToFile (data, header, fileName = 'Data.xlsx') {
+function exportToFile (data, header, fileType = 'xlsx', fileName = 'Data') {
+  var type = types.filter(type => type.name === fileType)[0]
   var ws = XLSX.utils.json_to_sheet(data, { header, cellDates: true })
   var wb = { SheetNames: ['data'], Sheets: { data: ws } }
-  var wopts = { bookType: 'xlsx', bookSST: false, type: 'binary' }
-  var wbout = XLSX.write(wb, wopts)
-  FileSaver.saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), fileName)
+  var wbout = XLSX.write(wb, {
+    bookType: fileType,
+    type: 'binary'
+  })
+  // Add a BOM to make sure the file opened correctly by Excel
+  // https://github.com/eligrey/FileSaver.js/issues/28
+  if (fileType === 'csv') wbout = '\uFEFF' + wbout
+  download(wbout, fileName + type.extension, 'application/octet-stream')
 }
 
 export default {

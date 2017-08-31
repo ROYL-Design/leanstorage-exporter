@@ -92,7 +92,7 @@ var store = new Vuex.Store({
         throw err
       })
     },
-    exportToFile (context) {
+    exportToFile (context, fileType) {
       context.state.loading = true
       var results = []
       api.get('/cloudQuery', { params: { cql: CQL.count(context.state.selectedClass, context.state.conditions) } })
@@ -120,7 +120,7 @@ var store = new Vuex.Store({
             line[key] = format.asFile(line[key], context.state.classes[context.state.selectedClass][key].type)
           }
         })
-        xlsx.exportToFile(results, getColumns(context.state))
+        xlsx.exportToFile(results, getColumns(context.state), fileType)
         context.state.loading = false
       }).catch(err => {
         context.state.loading = false
