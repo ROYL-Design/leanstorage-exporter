@@ -1,5 +1,4 @@
 import XLSX from 'xlsx'
-import FileSaver from 'file-saver'
 import types from './types'
 import download from 'downloadjs'
 
