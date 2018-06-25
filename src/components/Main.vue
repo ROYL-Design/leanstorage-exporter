@@ -111,8 +111,9 @@ export default {
   beforeRouteEnter (to, from, next) {
     var appId = window.localStorage.getItem('lse_app_id')
     var appKey = window.localStorage.getItem('lse_app_key')
-    if (!appId || !appKey) return next('/connect')
-    store.commit('initKeys', { appId, appKey })
+    var domain = window.localStorage.getItem('lse_domain')
+    if (!appId || !appKey || !domain) return next('/connect')
+    store.commit('initKeys', { appId, appKey, domain })
     next()
   },
   components: { Condition }

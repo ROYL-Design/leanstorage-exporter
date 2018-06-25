@@ -59,9 +59,9 @@ var store = new Vuex.Store({
     selectClass (state, className) {
       state.selectedClass = className
     },
-    initKeys (state, {appId, appKey}) {
+    initKeys (state, {appId, appKey, domain}) {
       api = axios.create({
-        baseURL: 'https://api.leancloud.cn/1.1',
+        baseURL: `https://${domain}/1.1`,
         headers: {
           'X-LC-Id': appId,
           'X-LC-Key': appKey + ',master'
